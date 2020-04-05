@@ -1,14 +1,9 @@
 class TasksController < ApplicationController
     before_action :require_user_logged_in
-    before_action :correct_user, only: [:show, :edit, :destroy]
-    before_action :set_task, only: [:show, :edit, :update, :destroy]
+    before_action :correct_user, only: [:show, :edit, :destroy, :update]
     
     def index
-        if logged_in?
         @tasks=current_user.tasks
-        else
-        redirect_to("/login")
-        end
     end
     
     def show
@@ -59,13 +54,6 @@ class TasksController < ApplicationController
     # Strong Parameter
     def task_params
         params.require(:task).permit(:content, :status)
-    end
-    
-    def correct_user
-    @task = current_user.tasks.find_by(id: params[:id])
-    unless @task
-      redirect_to root_url
-    end
     end
     
     def correct_user
